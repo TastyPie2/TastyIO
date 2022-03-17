@@ -3,8 +3,17 @@ using TastyIO.OS;
 
 namespace TastyIO
 {
+    /// <summary>
+    /// 
+    /// </summary>
     static public class TastyDir
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        /// <exception cref="PlatformNotSupportedException"></exception>
         public static bool Verify(string dir)
         {
             string root = dir.Split("\\").First();
@@ -63,17 +72,24 @@ namespace TastyIO
             return true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
         public static string[] GetDirecoriesRecursive(string dir)
         {
             return GetDirecories(dir);
         }
 
         /// <summary>
-        /// Copies the dir and all of its contents
+        /// 
         /// </summary>
         /// <param name="target"></param>
         /// <param name="destination"></param>
-        /// <returns>Returns the new path</returns>
+        /// <param name="overide"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static string Copy(string target, string destination, bool overide)
         {
             string subDest = Path.Combine(destination, target.Split("\\").Last());
@@ -106,6 +122,10 @@ namespace TastyIO
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="target"></param>
         public static void Delete(string target)
         {
             foreach (string file in TastyFile.GetFilesRecursive(target))
