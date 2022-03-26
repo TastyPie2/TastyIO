@@ -85,6 +85,22 @@ namespace TastyIO
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="dirs"></param>
+        /// <returns></returns>
+        public static string[] GetDirecoriesRecursive(params string[] dirs)
+        {
+            List<string> result = new();
+            foreach(string dir in dirs)
+            {
+                result.AddRange(GetDirecories(dir));
+            }
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="target"></param>
         /// <param name="destination"></param>
         /// <param name="overide"></param>
