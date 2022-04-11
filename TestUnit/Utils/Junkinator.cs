@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
+using System.Text;
 
 namespace TestUnit.Utils
 {
@@ -38,7 +35,7 @@ namespace TestUnit.Utils
         public static string[] GenerateJunkFiles(string dir, int fileCount, int fileLenght)
         {
             string[] files = new string[fileCount];
-            for(int i = 0; i < files.Length; i++)
+            for (int i = 0; i < files.Length; i++)
             {
                 files[i] = Path.Combine(dir, Guid.NewGuid().ToString() + ".jnk");
                 GenerateJunkFile(files[i], fileLenght);

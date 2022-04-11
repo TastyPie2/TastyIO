@@ -14,13 +14,13 @@ namespace TestUnit
         public void VerifyPath()
         {
             //Valid path
-            if(!TastyDir.VerifyPath("C:\\"))
+            if (!TastyDir.VerifyPath("C:\\"))
             {
                 Assert.Fail();
             }
 
             //Invalid path
-            if(TastyDir.VerifyPath("C\\"))
+            if (TastyDir.VerifyPath("C\\"))
             {
                 Assert.Fail();
             }
@@ -69,7 +69,7 @@ namespace TestUnit
             Guid guid = Guid.NewGuid();
             string appTempFolder = Path.Combine(Path.GetTempPath(), guid.ToString());
             string tempFile = Path.Combine(appTempFolder, $"{Guid.NewGuid()}.tmp");
-            
+
             Directory.CreateDirectory(appTempFolder);
             using FileStream stream = File.OpenWrite(tempFile);
 
@@ -83,11 +83,11 @@ namespace TestUnit
 
             TastyDir.DeleteDir(appTempFolder);
 
-            if(File.Exists(tempFile))
+            if (File.Exists(tempFile))
             {
                 Assert.Fail("File not deleted");
             }
-            if(Directory.Exists(appTempFolder))
+            if (Directory.Exists(appTempFolder))
             {
                 Assert.Fail("Folder not deleted");
             }

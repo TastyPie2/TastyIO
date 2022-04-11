@@ -89,7 +89,7 @@ namespace TastyIO
         public static string[] GetDirecoriesRecursive(params string[] dirs)
         {
             List<string> result = new();
-            foreach(string dir in dirs)
+            foreach (string dir in dirs)
             {
                 result.AddRange(GetDirecories(dir));
             }

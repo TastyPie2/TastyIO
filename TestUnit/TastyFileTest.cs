@@ -50,7 +50,7 @@ namespace TestUnit
             File.WriteAllText(temp2, tempData);
 
             //Compare
-            if(!TastyFile.CompareFiles(temp1, temp2))
+            if (!TastyFile.CompareFiles(temp1, temp2))
             {
                 Assert.Fail();
             }

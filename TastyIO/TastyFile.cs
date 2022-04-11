@@ -1,5 +1,4 @@
 ﻿using System.Security.Cryptography;
-using System.Text;
 using TastyIO.Utils;
 
 namespace TastyIO
@@ -9,6 +8,7 @@ namespace TastyIO
     /// </summary>
     public static class TastyFile
     {
+
         /// <summary>
         /// 
         /// </summary>
@@ -36,7 +36,7 @@ namespace TastyIO
 
             return hash1 == hash2;
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -74,12 +74,7 @@ namespace TastyIO
         /// <returns></returns>
         public static string[] GetFilesRecursive(string[] extentionFilter, string dir)
         {
-            List<string> result = new();
-
-            foreach (string di in TastyDir.GetDirecoriesRecursive(dir))
-            {
-                result.AddRange(Directory.GetFiles(di));
-            }
+            List<string> result = GetFilesRecursive(dir).ToList();
 
             result = result.Where(s => extentionFilter.Contains(new FileInfo(s).Extension)).ToList();
             return result.ToArray();
@@ -96,10 +91,7 @@ namespace TastyIO
 
             foreach (string dir in dirs)
             {
-                foreach (string di in TastyDir.GetDirecoriesRecursive(dir))
-                {
-                    result.AddRange(Directory.GetFiles(di));
-                }
+                result.AddRange(GetFilesRecursive(dir).ToList());
             }
 
             return result.ToArray();
