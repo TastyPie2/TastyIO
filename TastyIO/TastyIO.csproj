@@ -9,6 +9,10 @@
     <AssemblyOriginatorKeyFile>Certificate.pfx</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
+    <RepositoryUrl>https://github.com/TastyPie2/TastyIO</RepositoryUrl>
+    <PackageIcon>TastyPie_2.png</PackageIcon>
+    <Company></Company>
+    <Authors>TastyPastry</Authors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -18,5 +22,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <WarningLevel>1</WarningLevel>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="TastyPie_2.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TastyPie_2.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

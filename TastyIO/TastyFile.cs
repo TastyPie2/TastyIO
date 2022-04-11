@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using TastyIO.Utils;
 
 namespace TastyIO
 {
@@ -11,57 +12,14 @@ namespace TastyIO
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="filePath"></param>
         /// <param name="algorithmName"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static string Hash(string path, HashAlgorithmName algorithmName)
+        public static string Hash(string filePath, HashAlgorithmName algorithmName)
         {
-            using Stream stream = File.OpenText(path).BaseStream;
-            byte[] hash;
-            string result;
-
-            switch (algorithmName.Name)
-            {
-                case "MD5":
-                    MD5 md5 = MD5.Create();
-                    hash = md5.ComputeHash(stream);
-                    result = Encoding.UTF8.GetString(hash);
-                    md5.Dispose();
-                    break;
-
-                case "SHA1":
-                    SHA1 sha1 = SHA1.Create();
-                    hash = sha1.ComputeHash(stream);
-                    result = Encoding.UTF8.GetString(hash);
-                    sha1.Dispose();
-                    break;
-
-                case "SHA256":
-                    SHA256 sha256 = SHA256.Create();
-                    hash = sha256.ComputeHash(stream);
-                    result = Encoding.UTF8.GetString(hash);
-                    sha256.Dispose();
-                    break;
-
-                case "SHA384":
-                    SHA384 sha384 = SHA384.Create();
-                    hash = sha384.ComputeHash(stream);
-                    result = Encoding.UTF8.GetString(hash);
-                    sha384.Dispose();
-                    break;
-
-                case "SHA512":
-                    SHA512 sha512 = SHA512.Create();
-                    hash = sha512.ComputeHash(stream);
-                    result = Encoding.UTF8.GetString(hash);
-                    sha512.Dispose();
-                    break;
-
-                default:
-                    throw new ArgumentException("Unkown algorithm");
-            }
-
+            //Abstracted to different class
+            string result = Hashing.HashFile(filePath, algorithmName);
             return result;
         }
 
@@ -84,7 +42,7 @@ namespace TastyIO
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static bool Verify(string path)
+        public static bool VerifyPath(string path)
         {
             return TastyDir.Verify(path);
         }
@@ -97,6 +55,8 @@ namespace TastyIO
         public static string[] GetFilesRecursive(string dir)
         {
             List<string> result = new();
+
+            result.AddRange(Directory.GetFiles(dir));
 
             foreach (string di in TastyDir.GetDirecoriesRecursive(dir))
             {

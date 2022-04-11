@@ -16,14 +16,14 @@ namespace TastyIO
         /// <exception cref="PlatformNotSupportedException"></exception>
         public static bool Verify(string dir)
         {
-            string root = dir.Split("\\").First();
+            string root = dir.Split("\\").First() + "\\";
 
             //Win32
             switch (Environment.OSVersion.Platform)
             {
 
                 case PlatformID.Win32NT:
-                    Regex rootVerification = new(@"[A-Z]:\\", RegexOptions.Compiled);
+                    Regex rootVerification = new(@"[A-Z]:\\", RegexOptions.IgnoreCase);
                     string unRooted = Path.GetRelativePath(root, dir);
 
                     if (dir.EndsWith(' ') || dir.EndsWith('.'))
@@ -67,7 +67,6 @@ namespace TastyIO
                     //Unkown
                     throw new PlatformNotSupportedException($"{Environment.OSVersion} is not supported.");
             }
-
 
             return true;
         }
@@ -148,6 +147,7 @@ namespace TastyIO
             {
                 File.Delete(file);
             }
+            Directory.Delete(target, true);
         }
 
         private static string[] GetDirecories(string parrentDir)
