@@ -11,16 +11,16 @@ namespace TestUnit
     public class TastyDirTest
     {
         [TestMethod]
-        public void Verify()
+        public void VerifyPath()
         {
             //Valid path
-            if(!TastyDir.Verify("C:\\"))
+            if(!TastyDir.VerifyPath("C:\\"))
             {
                 Assert.Fail();
             }
 
             //Invalid path
-            if(TastyDir.Verify("C\\"))
+            if(TastyDir.VerifyPath("C\\"))
             {
                 Assert.Fail();
             }
@@ -42,10 +42,10 @@ namespace TestUnit
             Random random = new Random();
             Junkinator.GenerateJunkFiles(original, random.Next(1, 100), random.Next(1, 10000));
 
-            string copy = TastyDir.Copy(original, AppDomain.CurrentDomain.BaseDirectory, true);
+            string copy = TastyDir.CopyDir(original, AppDomain.CurrentDomain.BaseDirectory, true);
 
-            TastyDir.Delete(original);
-            TastyDir.Delete(copy);
+            TastyDir.DeleteDir(original);
+            TastyDir.DeleteDir(copy);
         }
 
         [TestMethod]
@@ -58,9 +58,9 @@ namespace TestUnit
             Random random = new Random();
             Junkinator.GenerateJunkFiles(original, random.Next(1, 100), random.Next(1, 10000));
 
-            original = TastyDir.Move(original, AppDomain.CurrentDomain.BaseDirectory, true);
+            original = TastyDir.MoveDir(original, AppDomain.CurrentDomain.BaseDirectory, true);
 
-            TastyDir.Delete(original);
+            TastyDir.DeleteDir(original);
         }
 
         [TestMethod]
@@ -81,7 +81,7 @@ namespace TestUnit
             stream.Close();
             stream.Dispose();
 
-            TastyDir.Delete(appTempFolder);
+            TastyDir.DeleteDir(appTempFolder);
 
             if(File.Exists(tempFile))
             {

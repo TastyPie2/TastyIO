@@ -14,7 +14,7 @@ namespace TastyIO
         /// <param name="dir"></param>
         /// <returns></returns>
         /// <exception cref="PlatformNotSupportedException"></exception>
-        public static bool Verify(string dir)
+        public static bool VerifyPath(string dir)
         {
             string root = dir.Split("\\").First() + "\\";
 
@@ -105,7 +105,7 @@ namespace TastyIO
         /// <param name="overide"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static string Copy(string target, string destination, bool overide)
+        public static string CopyDir(string target, string destination, bool overide)
         {
             string subDest = Path.Combine(destination, target.Split("\\").Last());
 
@@ -122,7 +122,7 @@ namespace TastyIO
         /// <summary>
         /// Moves the dir and all of its contents
         /// </summary>
-        public static string Move(string target, string destination, bool overide)
+        public static string MoveDir(string target, string destination, bool overide)
         {
             string subDest = Path.Combine(destination, target.Split("\\").Last());
 
@@ -141,7 +141,7 @@ namespace TastyIO
         /// 
         /// </summary>
         /// <param name="target"></param>
-        public static void Delete(string target)
+        public static void DeleteDir(string target)
         {
             foreach (string file in TastyFile.GetFilesRecursive(target))
             {

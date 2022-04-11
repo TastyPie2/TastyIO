@@ -16,7 +16,7 @@ namespace TastyIO
         /// <param name="algorithmName"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static string Hash(string filePath, HashAlgorithmName algorithmName)
+        public static string HashFile(string filePath, HashAlgorithmName algorithmName)
         {
             //Abstracted to different class
             string result = Hashing.HashFile(filePath, algorithmName);
@@ -29,10 +29,10 @@ namespace TastyIO
         /// <param name="file1"></param>
         /// <param name="file2"></param>
         /// <returns></returns>
-        public static bool Compare(string file1, string file2)
+        public static bool CompareFiles(string file1, string file2)
         {
-            string hash1 = Hash(file1, HashAlgorithmName.MD5);
-            string hash2 = Hash(file2, HashAlgorithmName.MD5);
+            string hash1 = HashFile(file1, HashAlgorithmName.MD5);
+            string hash2 = HashFile(file2, HashAlgorithmName.MD5);
 
             return hash1 == hash2;
         }
@@ -44,7 +44,7 @@ namespace TastyIO
         /// <returns></returns>
         public static bool VerifyPath(string path)
         {
-            return TastyDir.Verify(path);
+            return TastyDir.VerifyPath(path);
         }
 
         /// <summary>

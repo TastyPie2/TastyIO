@@ -12,7 +12,7 @@ namespace TestUnit
     public class TastyFileTest
     {
         [TestMethod]
-        public void Hash()
+        public void HashFile()
         {
             string referenceHash;
             string resultHash;
@@ -27,7 +27,7 @@ namespace TestUnit
             referenceHash = Encoding.UTF8.GetString(md.ComputeHash(data));
 
             //Semi manual
-            resultHash = TastyFile.Hash(tempFile, HashAlgorithmName.MD5);
+            resultHash = TastyFile.HashFile(tempFile, HashAlgorithmName.MD5);
 
             //Cleanup
             File.Delete(tempFile);
@@ -38,7 +38,7 @@ namespace TestUnit
         }
 
         [TestMethod]
-        public void Compare()
+        public void CompareFiles()
         {
             string tempData = "Hello World!";
             //Create tmp files
@@ -50,7 +50,7 @@ namespace TestUnit
             File.WriteAllText(temp2, tempData);
 
             //Compare
-            if(!TastyFile.Compare(temp1, temp2))
+            if(!TastyFile.CompareFiles(temp1, temp2))
             {
                 Assert.Fail();
             }
@@ -108,7 +108,7 @@ namespace TestUnit
             }
 
             //Cleanup
-            TastyDir.Delete(tempDir);
+            TastyDir.DeleteDir(tempDir);
         }
     }
 }
