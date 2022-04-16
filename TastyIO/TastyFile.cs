@@ -7,28 +7,73 @@ namespace TastyIO
     /// <summary>
     /// 
     /// </summary>
-    public static class TastyFile
+    public class TastyFile
     {
+        #region Singleton
+        //One of my first times writing singletons outside of games.
+
+        private static TastyFile? _instance;
+        public static TastyFile Instance { get => GetSingleton(); private set => _instance = value; }
+
+        void Singleton()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                tempFiles = Instance.tempFiles;
+            }
+        }
+
+        protected static TastyFile GetSingleton()
+        {
+            if (_instance == null)
+            {
+                //Redundant
+                _instance = new TastyFile();
+            }
+            return _instance;
+        }
+
+        #endregion
+
         #region Variables
-        static List<string> tempFiles = new List<string>();
+        List<string> tempFiles = new List<string>();
         #endregion
 
         #region Methods
+
+        public TastyFile()
+        {
+            Singleton();
+        }
+
+        ~TastyFile()
+        {
+            foreach(string file in tempFiles)
+            {
+                FileInfo fileInfo = new FileInfo(file);
+                fileInfo.Delete();
+            }
+        }
+
         #region Temp
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         /// /// <exception cref="InvalidPathExseption"></exception>
-        public static string CreateTempFile()
+        public string CreateTempFile()
         {
-            string dir = TastyDir.CreateTempDir();
+            string dir = TastyDir.Instance.CreateTempDir();
             string file = CreateFile(dir, Guid.NewGuid().ToString(), "tmp");
 
             return file;
         }
 
-        public static void ClearTempFiles()
+        public void ClearTempFiles()
         {
             foreach(string file in tempFiles)
             {
@@ -49,7 +94,7 @@ namespace TastyIO
         /// <param name="fileExtention"></param>
         /// <returns></returns>
         /// <exception cref="InvalidPathExseption"></exception>
-        public static string CreateFile(string dir, string filename, string fileExtention)
+        public string CreateFile(string dir, string filename, string fileExtention)
         {
             if(!fileExtention.StartsWith("."))
             {
@@ -73,13 +118,13 @@ namespace TastyIO
             }
         }
 
-        public static void DeleteFile(string filePath)
+        public void DeleteFile(string filePath)
         {
             ThrowIfInvalidPath(filePath, true);
             File.Delete(filePath);
         }
 
-        public static void DeleteFile(string dir, string filename)
+        public void DeleteFile(string dir, string filename)
         {
             string filePath = Path.Combine(dir, filename);
             ThrowIfInvalidPath(filePath, true);

@@ -3,12 +3,41 @@ using TastyIO.OS;
 
 namespace TastyIO
 {
-    static public class TastyDir
+    public class TastyDir
     {
+        #region Singleton
+        //One of my first times writing singletons outside of games.
+
+        private static TastyDir? _instance;
+        public static TastyDir Instance { get => GetSingleton(); private set => _instance = value; }
+
+        void Singleton()
+        {
+            if(Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                tempDirs = Instance.tempDirs;
+            }
+        }
+
+        protected static TastyDir GetSingleton()
+        {
+            if(_instance == null)
+            {
+                _instance = new TastyDir();
+            }
+            return _instance;
+        }
+
+        #endregion
+
         #region Variables
 
         #region Private
-        static List<string> tempDirs = new List<string>();
+        List<string> tempDirs = new List<string>();
         #endregion
         #region Public
 
@@ -18,8 +47,21 @@ namespace TastyIO
 
         #region Methods
 
+        public TastyDir()
+        {
+            Singleton();
+        }
+
+        ~TastyDir()
+        {
+            foreach(string dir in tempDirs)
+            {
+                DeleteDir(dir);
+            }
+        }
+
         #region Public
-        public static List<string> GetTempDirs()
+        public List<string> GetTempDirs()
         {
             return tempDirs;
         }
@@ -29,7 +71,7 @@ namespace TastyIO
         /// </summary>
         /// <param name="ignoreExisting"></param>
         /// <returns></returns>
-        public static string CreateTempDir(bool ignoreExisting = false)
+        public string CreateTempDir(bool ignoreExisting = false)
         {
             if (ignoreExisting || tempDirs.Count == 0)
             {
