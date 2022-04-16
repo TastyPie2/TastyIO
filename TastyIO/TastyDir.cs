@@ -3,11 +3,48 @@ using TastyIO.OS;
 
 namespace TastyIO
 {
-    /// <summary>
-    /// 
-    /// </summary>
     static public class TastyDir
     {
+        #region Variables
+
+        #region Private
+        static List<string> tempDirs = new List<string>();
+        #endregion
+        #region Public
+
+        #endregion
+
+        #endregion
+
+        #region Methods
+
+        #region Public
+        public static List<string> GetTempDirs()
+        {
+            return tempDirs;
+        }
+
+        /// <summary>
+        /// Returns new or last tempdir
+        /// </summary>
+        /// <param name="ignoreExisting"></param>
+        /// <returns></returns>
+        public static string CreateTempDir(bool ignoreExisting = false)
+        {
+            if (ignoreExisting || tempDirs.Count == 0)
+            {
+                string dirPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+                Directory.CreateDirectory(dirPath);
+            
+                tempDirs.Add(dirPath);
+                return dirPath;
+            }
+            else
+            {
+                return tempDirs.Last();
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -71,21 +108,11 @@ namespace TastyIO
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dir"></param>
-        /// <returns></returns>
         public static string[] GetDirecoriesRecursive(string dir)
         {
             return GetDirecories(dir);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dirs"></param>
-        /// <returns></returns>
         public static string[] GetDirecoriesRecursive(params string[] dirs)
         {
             List<string> result = new();
@@ -137,10 +164,6 @@ namespace TastyIO
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="target"></param>
         public static void DeleteDir(string target)
         {
             foreach (string file in TastyFile.GetFilesRecursive(target))
@@ -149,6 +172,10 @@ namespace TastyIO
             }
             Directory.Delete(target, true);
         }
+
+        #endregion
+
+        #region Private
 
         private static string[] GetDirecories(string parrentDir)
         {
@@ -168,5 +195,8 @@ namespace TastyIO
             return result.ToArray();
         }
 
+        #endregion
+
+        #endregion
     }
 }
