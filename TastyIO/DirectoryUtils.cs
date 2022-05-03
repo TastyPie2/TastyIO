@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TastyIO
 {
@@ -115,7 +116,24 @@ namespace TastyIO
                 var results = new List<string>();
                 var currentDirs = new List<string>() { dir };
 
-                loopStart:
+            loopStart:
+                var nextDirs = new List<string>();
+                Parallel.ForEach(currentDirs, currentDir => 
+                { 
+                    if(TryGetDirectories(currentDir, out var dirs))
+                    {
+                        nextDirs.AddRange(dirs);
+                        results.AddRange(dirs);
+                    }
+                });
+
+                if(nextDirs.Count > 0)
+                {
+                    currentDirs = nextDirs;
+                    goto loopStart;
+                }
+
+                return results;
             }
             catch (Exception ex)
             {
@@ -123,6 +141,7 @@ namespace TastyIO
                 throw;
             }
         }
+
         #endregion
     }
 }
