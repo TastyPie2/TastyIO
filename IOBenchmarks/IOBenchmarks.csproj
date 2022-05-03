@@ -8,9 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="TastyIO">
-      <HintPath>..\..\TastyPie2\TastyIO\TastyIO\bin\Debug\netstandard2.0\TastyIO.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\TastyIO\TastyIO.csproj" />
   </ItemGroup>
 
 </Project>
