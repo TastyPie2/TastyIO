@@ -6,21 +6,18 @@ using System.Threading.Tasks;
 
 namespace TastyIO
 {
-    public static class FileUtils
+    public class FileUtils
     {
         #region Events
 
-        public delegate void WarningDelegate(DateTime localTime, Exception ex, string message);
-        public delegate void ErrorDelegate(DateTime localTime, Exception ex, string message);
-
-        public static event WarningDelegate OnWarning;
-        public static event ErrorDelegate OnError;
+        public event WarningDelegate OnWarning;
+        public event ErrorDelegate OnError;
 
         #endregion
 
         #region Convenience
 
-        private static bool SendWarning(Exception ex)
+        private bool SendWarning(Exception ex)
         {
             if (OnWarning == null)
                 return false;
@@ -30,7 +27,7 @@ namespace TastyIO
             return true;
         }
 
-        private static bool SendError(Exception ex)
+        private bool SendError(Exception ex)
         {
             if (OnError == null)
                 return false;
@@ -40,7 +37,7 @@ namespace TastyIO
             return true;
         }
 
-        public static bool TryGetFiles(string dir, out string[] files)
+        public bool TryGetFiles(string dir, out string[] files)
         {
             try
             {
@@ -55,7 +52,7 @@ namespace TastyIO
             }
         }
 
-        public static bool TryGetDirectories(string dir, out string[] dirs)
+        public bool TryGetDirectories(string dir, out string[] dirs)
         {
             try
             {
@@ -74,7 +71,7 @@ namespace TastyIO
         /// Including the leading dot.
         /// </summary>
         /// <returns></returns>
-        public static bool TryGetFileExtention(string filePath, out string fileExtention)
+        public bool TryGetFileExtention(string filePath, out string fileExtention)
         {
             try
             {
@@ -95,7 +92,7 @@ namespace TastyIO
         /// <param name="filePath"></param>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public static bool TryGetFileName(string filePath, out string filename)
+        public bool TryGetFileName(string filePath, out string filename)
         { 
             try
             {
@@ -113,7 +110,7 @@ namespace TastyIO
 
         #region RecursiveSearch
         //Not very DRY -_-
-        public static IEnumerable<string> EnumerateFilesRecursive(string dir)
+        public IEnumerable<string> EnumerateFilesRecursive(string dir)
         {
             if (dir == null)
                 throw new ArgumentNullException(string.Format("{0} cannot be null.", nameof(dir)));
@@ -142,7 +139,7 @@ namespace TastyIO
         }
 
         //Not very DRY -_-
-        public static List<string> GetFilesRecursive(string dir)
+        public List<string> GetFilesRecursive(string dir)
         {
             if (dir == null)
                 throw new ArgumentNullException(string.Format("{0} cannot be null.", nameof(dir)));
@@ -171,7 +168,7 @@ namespace TastyIO
         }
 
         //Not very DRY -_-
-        public static List<string> GetFilesRecursiveParallel(string dir)
+        public List<string> GetFilesRecursiveParallel(string dir)
         {
             try
             {
@@ -220,7 +217,7 @@ namespace TastyIO
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public static ICollection<string> FilerByExtention(ICollection<string> collection, string extention, bool ignoreCaseing = false)
+        public ICollection<string> FilerByExtention(ICollection<string> collection, string extention, bool ignoreCaseing = false)
         {
             if (ignoreCaseing)
                 extention = extention.ToLower();
@@ -246,7 +243,7 @@ namespace TastyIO
             return result;
         }
 
-        public static ICollection<string> FilterByFileName(ICollection<string> collection, string filename, bool ignoreCase = false)
+        public ICollection<string> FilterByFileName(ICollection<string> collection, string filename, bool ignoreCase = false)
         {
             if(ignoreCase)
                 filename = filename.ToLower();
@@ -270,6 +267,7 @@ namespace TastyIO
 
             return result;
         }
+
         #endregion
     }
 }
