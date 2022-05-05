@@ -26,11 +26,10 @@ namespace IOBenchmarks.Modules
             results.IsSuccess = true;
             try
             {
-                var directoryUtils = new DirectoryUtils();
                 var sw = Stopwatch.StartNew();
 
 
-                var dirs = directoryUtils.GetDirectoriesRecursive("C:\\");
+                var dirs = DirectoryUtils.GetDirectoriesRecursive("C:\\");
 
                 sw.Stop();
                 results.SetMessage(ResultsFormatter.FormattDirectoryResults(dirs.Count, (int)sw.Elapsed.TotalSeconds));

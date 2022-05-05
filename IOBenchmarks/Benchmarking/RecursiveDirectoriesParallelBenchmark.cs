@@ -21,11 +21,9 @@ namespace IOBenchmarks.Benchmarks
             results.IsSuccess = true;
             try
             {
-                var directoryUtils = new DirectoryUtils();
                 var sw = Stopwatch.StartNew();
 
-
-                var dirs = directoryUtils.GetDirectoriesRecursiveParallel("C:\\");
+                var dirs = DirectoryUtils.GetDirectoriesRecursiveParallel("C:\\");
 
                 sw.Stop();
                 results.SetMessage(ResultsFormatter.FormattDirectoryResults(dirs.Count, (int)sw.Elapsed.TotalSeconds));

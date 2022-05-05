@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace TastyIO
 {
-    public class FileUtils
+    public static class FileUtils
     {
         #region Convenience
-        public bool TryGetFiles(string dir, out string[] files)
+        public static bool TryGetFiles(string dir, out string[] files)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace TastyIO
             }
         }
 
-        public bool TryGetDirectories(string dir, out string[] dirs)
+        public static bool TryGetDirectories(string dir, out string[] dirs)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace TastyIO
         /// Including the leading dot.
         /// </summary>
         /// <returns></returns>
-        public bool TryGetFileExtention(string filePath, out string fileExtention)
+        public static bool TryGetFileExtention(string filePath, out string fileExtention)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace TastyIO
         /// <param name="filePath"></param>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public bool TryGetFileName(string filePath, out string filename)
+        public static bool TryGetFileName(string filePath, out string filename)
         { 
             try
             {
@@ -82,7 +82,7 @@ namespace TastyIO
 
         #region RecursiveSearch
         //Not very DRY -_-
-        public IEnumerable<string> EnumerateFilesRecursive(string dir)
+        public static IEnumerable<string> EnumerateFilesRecursive(string dir)
         {
             if (dir == null)
                 throw new ArgumentNullException(string.Format("{0} cannot be null.", nameof(dir)));
@@ -111,7 +111,7 @@ namespace TastyIO
         }
 
         //Not very DRY -_-
-        public List<string> GetFilesRecursive(string dir)
+        public static List<string> GetFilesRecursive(string dir)
         {
             if (dir == null)
                 throw new ArgumentNullException(string.Format("{0} cannot be null.", nameof(dir)));
@@ -140,7 +140,7 @@ namespace TastyIO
         }
 
         //Not very DRY -_-
-        public List<string> GetFilesRecursiveParallel(string dir)
+        public static List<string> GetFilesRecursiveParallel(string dir)
         {
             try
             {
@@ -189,7 +189,7 @@ namespace TastyIO
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public ICollection<string> FilerByExtention(ICollection<string> collection, string extention, bool ignoreCaseing = false)
+        public static ICollection<string> FilerByExtention(ICollection<string> collection, string extention, bool ignoreCaseing = false)
         {
             if (ignoreCaseing)
                 extention = extention.ToLower();
@@ -215,7 +215,7 @@ namespace TastyIO
             return result;
         }
 
-        public ICollection<string> FilterByFileName(ICollection<string> collection, string filename, bool ignoreCase = false)
+        public static ICollection<string> FilterByFileName(ICollection<string> collection, string filename, bool ignoreCase = false)
         {
             if(ignoreCase)
                 filename = filename.ToLower();
@@ -240,6 +240,124 @@ namespace TastyIO
             return result;
         }
 
+        #endregion
+
+        #region Creation
+
+        public static void CreateFile(string filePath)
+        {
+            try
+            {
+                var info = new FileInfo(filePath);
+                info.Directory.Create();
+                info.Create();
+            }
+            catch (Exception ex)
+            {
+                IOLoger.LogErrorAsnyc(ex);
+                throw;
+            }
+        }
+
+        public static void CreateFile(string filePath, string contents)
+        {
+            CreateFile(filePath);
+            try
+            {
+                using(StreamWriter writer = new StreamWriter(filePath))
+                {
+                    writer.Write(contents);
+                }
+            }
+            catch(Exception ex)
+            {
+                IOLoger.LogErrorAsnyc(ex);
+                throw;
+            }
+        }
+
+        public static void CreateFile(string filePath, byte[] contents)
+        {
+            CreateFile(filePath);
+            try
+            {
+                using(var fs = File.OpenWrite(filePath))
+                {
+                    fs.Write(contents, 0, contents.Length);
+                }
+            }
+            catch(Exception ex)
+            {
+                IOLoger.LogErrorAsnyc(ex);
+                throw;
+            }
+        }
+
+        public static void CreateFile(string dir, string fileName, string contents)
+        {
+            var filePath = Path.Combine(dir, fileName);
+            CreateFile(filePath, contents);
+        }
+
+        public static void CreateFile(string dir, string fileName, byte[] contents)
+        {
+            var filePath = Path.Combine(dir, fileName);
+            CreateFile(filePath, contents);
+        }
+
+        public static void CreateFiles(IEnumerable<string> filePaths)
+        {
+            try
+            { 
+                foreach(var filePath in filePaths)
+                {
+                    var info = new FileInfo(filePath);
+                    info.Directory.Create();
+                    info.Create();
+                }
+            }
+            catch(Exception ex)
+            {
+                IOLoger.LogErrorAsnyc(ex);
+                throw;
+            }
+        }
+
+        public static void CreateFiles(IEnumerable<string> filePaths, IEnumerable<string> contents)
+        {
+            CreateFiles(filePaths);
+            try
+            {
+                var paths = filePaths.ToArray();
+                var con = contents.ToArray();
+                for (int i = 0; i < paths.Length; i++)
+                {
+                    using (var writer = new StreamWriter(paths[i]))
+                    {
+                        writer.Write(con[i]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                IOLoger.LogErrorAsnyc(ex);
+                throw;
+            }
+        }
+        #endregion
+
+        #region Erasure
+        public static void DeleteFile(string fileName)
+        {
+            try
+            {
+                File.Delete(fileName);
+            }
+            catch (Exception ex)
+            {
+                IOLoger.LogErrorAsnyc(ex);
+            }
+        }
         #endregion
     }
 }
