@@ -8,35 +8,7 @@ namespace TastyIO
 {
     public class FileUtils
     {
-        #region Events
-
-        public event WarningDelegate OnWarning;
-        public event ErrorDelegate OnError;
-
-        #endregion
-
         #region Convenience
-
-        private bool SendWarning(Exception ex)
-        {
-            if (OnWarning == null)
-                return false;
-
-            var msg = ex.Message;
-            OnWarning.Invoke(DateTime.Now, ex, msg);
-            return true;
-        }
-
-        private bool SendError(Exception ex)
-        {
-            if (OnError == null)
-                return false;
-
-            var msg = ex.Message;
-            OnError.Invoke(DateTime.Now, ex, msg);
-            return true;
-        }
-
         public bool TryGetFiles(string dir, out string[] files)
         {
             try
@@ -46,7 +18,7 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
-                SendWarning(ex);
+                IOLoger.LogWarningAsync(ex);
                 files = null;
                 return false;
             }
@@ -61,7 +33,7 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
-                SendWarning(ex);
+                IOLoger.LogWarningAsync(ex);
                 dirs = null;
                 return false;
             }
@@ -80,7 +52,7 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
-                SendWarning(ex);
+                IOLoger.LogWarningAsync(ex);
                 fileExtention = null;
                 return false;
             }
@@ -101,7 +73,7 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
-                SendWarning(ex);
+                IOLoger.LogWarningAsync(ex);
                 filename = null;
                 return false;
             }
@@ -204,7 +176,7 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
-                SendError(ex);
+                IOLoger.LogErrorAsnyc(ex);
                 throw;
             }
         }

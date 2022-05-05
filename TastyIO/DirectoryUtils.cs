@@ -7,42 +7,14 @@ namespace TastyIO
 {
     public class DirectoryUtils
     {
-        #region Events
-
-        public event WarningDelegate OnWarning;
-        public event ErrorDelegate OnError;
-
-        #endregion
-
         #region Convenience
-
-        private bool SendWarning(Exception ex)
-        {
-            if (OnWarning == null)
-                return false;
-
-            var msg = ex.Message;
-            OnWarning.Invoke(DateTime.Now, ex, msg);
-            return true;
-        }
-
-        private bool SendError(Exception ex)
-        {
-            if (OnError == null)
-                return false;
-
-            var msg = ex.Message;
-            OnError.Invoke(DateTime.Now, ex, msg);
-            return true;
-        }
 
         public bool TryGetDirectories(string dir, out string[] dirs)
         {
-            var notNull = IOUtility.TryGetDirectories(dir, out dirs, out var ex);
+            var notNull = IOUtility.TryGetDirectories(dir, out dirs);
 
             if (!notNull)
             {
-                SendWarning(ex);
                 return false;
             }
 
@@ -80,52 +52,24 @@ namespace TastyIO
 
         public List<string> GetDirectoriesRecursive(string dir)
         {
-            if (dir == null)
-                throw new ArgumentNullException(string.Format("{0} cannot be null.", nameof(dir)));
-
-            var results = new List<string>();
-            var currentDirs = new List<string> { dir };
-
-            loopStart:
-            var nextDirs = new List<string>();
-            foreach(var currentDir in currentDirs)
-            {
-                if(TryGetDirectories(currentDir, out var dirs))
-                {
-                    results.AddRange(dirs);
-                    nextDirs.AddRange(dirs);
-                }
-            }
-
-            if(nextDirs.Count > 0)
-            {
-                currentDirs = nextDirs;
-                goto loopStart;
-            }
-
-            return results;
-        }
-
-        public List<string> GetDirectoriesRecursiveParallel(string dir)
-        {
             try
             {
                 if (dir == null)
                 throw new ArgumentNullException(string.Format("{0} cannot be null.", nameof(dir)));
 
                 var results = new List<string>();
-                var currentDirs = new List<string>() { dir };
+                var currentDirs = new List<string> { dir };
 
-            loopStart:
+                loopStart:
                 var nextDirs = new List<string>();
-                Parallel.ForEach(currentDirs, currentDir => 
-                { 
+                foreach(var currentDir in currentDirs)
+                {
                     if(TryGetDirectories(currentDir, out var dirs))
                     {
-                        nextDirs.AddRange(dirs);
                         results.AddRange(dirs);
+                        nextDirs.AddRange(dirs);
                     }
-                });
+                }
 
                 if(nextDirs.Count > 0)
                 {
@@ -134,13 +78,82 @@ namespace TastyIO
                 }
 
                 return results;
+
             }
             catch (Exception ex)
             {
-                SendError(ex);
+                IOLoger.LogErrorAsnyc(ex);
                 throw;
             }
         }
+
+        public List<string> GetDirectoriesRecursiveParallel(string dir)
+        {
+            try
+            {
+                if (dir == null)
+                    throw new ArgumentNullException(string.Format("{0} cannot be null.", nameof(dir)));
+
+                var results = new List<string>();
+                var currentDirs = new List<string> { dir };
+
+            loopStart:
+                var nextDirs = new List<string>();
+                Parallel.ForEach(currentDirs, (currentDir) =>
+                {
+                    if (TryGetDirectories(currentDir, out var dirs))
+                    {
+                        lock (results)
+                        {
+                            lock (nextDirs)
+                            {
+                                results.AddRange(dirs);
+                                nextDirs.AddRange(dirs);
+                            }
+                        }
+                    }
+                });
+
+                if (nextDirs.Count > 0)
+                {
+                    currentDirs = nextDirs;
+                    goto loopStart;
+                }
+
+                return results;
+
+            }
+            catch (Exception ex)
+            {
+                IOLoger.LogErrorAsnyc(ex);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region DirectoryManagement
+
+        public static void CreateDirectory(string dir)
+        {
+
+        }
+
+        public static async Task CreateDirectoryAsync(string dir)
+        {
+
+        }
+
+        public static bool TryCreateDirectory(string dir)
+        {
+
+        }
+
+        public static async Task<bool> TryCreateDirectoryAsync(string dir)
+        {
+
+        }
+
 
         #endregion
     }

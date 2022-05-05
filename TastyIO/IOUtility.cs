@@ -5,12 +5,11 @@ using System.Text;
 
 namespace TastyIO
 {
-    public delegate void WarningDelegate(DateTime localTime, Exception ex, string message);
-    public delegate void ErrorDelegate(DateTime localTime, Exception ex, string message);
-
-    internal static class IOUtility
+    public static class IOUtility
     {
-        public static bool TryGet<T>(out T result, out Exception exception, Func<T> func)
+
+        #region Get
+        public static bool TryGet<T>(Func<T> func, out T result, out Exception exception)
         {
             try
             {
@@ -26,20 +25,66 @@ namespace TastyIO
             }
         }
 
-        public static bool TryGetDirectories(string dir, out string[] dirs, out Exception ex)
+        public static bool TryGetDirectories(string dir, out string[] dirs)
+        {
+            bool result = TryGet(() => Directory.GetDirectories(dir), out dirs, out var ex);
+            if(!result)
+            {
+                IOLoger.LogWarningAsync(ex);
+            }
+
+            return result;
+        }
+
+        public static bool TryGetFiles(string dir, out string[] dirs)
+        {
+            bool result = TryGet(() => Directory.GetFiles(dir), out dirs, out var ex);
+            if (!result)
+            {
+                IOLoger.LogWarningAsync(ex);
+            }
+
+            return result;
+        }
+
+        public static bool TryOpenRead(string path, out StreamReader reader)
+        {
+            bool result = TryGet(() => new StreamReader(path), out reader, out var ex);
+            if (!result)
+            {
+                IOLoger.LogWarningAsync(ex);
+            }
+
+            return result;
+        }
+
+        public static bool TryOpenWrite(string path, out StreamWriter writer)
+        {
+            bool result = TryGet(() => new StreamWriter(path), out writer, out var ex);
+            if (!result)
+            {
+                IOLoger.LogWarningAsync(ex);
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region Try
+        public static bool Try(Action func, out Exception exception)
         {
             try
             {
-                ex = null;
-                dirs = Directory.GetDirectories(dir);
+                func.Invoke();
+                exception = null;
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                dirs = null;
-                ex = e;
+                exception = ex;
                 return false;
             }
         }
+        #endregion
     }
 }

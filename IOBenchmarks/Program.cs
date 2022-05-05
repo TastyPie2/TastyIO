@@ -8,6 +8,8 @@ public static class Program
     public static readonly ConsoleColor BACKGROUND_COLOR = ConsoleColor.Black;
     static void Main()
     {
+        IOLoger.CreateOutputFile();
+
         var benchmarkResults =  new List<BenchmarkResult>();
 
         var entryAssembly = Assembly.GetEntryAssembly();
@@ -19,10 +21,20 @@ public static class Program
             var a = (IBenchmark?)Activator.CreateInstance(type);
             if(a != null)
             {
-                a.Benchmark();
+                benchmarkResults.Add(a.Benchmark());
             }
         }
 
+        foreach(var benchmark in benchmarkResults)
+        {
+            var formatted = string.Format(
+                "##############################\n" +
+                "Name: {0}\n" +
+                "Suceeded: {1}\n" +
+                "{2}" ,benchmark.Name, benchmark.IsSuccess, benchmark.Message);
+
+            Console.WriteLine(formatted);
+        }
         Console.ReadLine();
     }
 
