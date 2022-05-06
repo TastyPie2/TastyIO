@@ -18,7 +18,9 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 IOLoger.LogWarningAsync(ex);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 files = null;
                 return false;
             }
@@ -33,7 +35,9 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 IOLoger.LogWarningAsync(ex);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 dirs = null;
                 return false;
             }
@@ -52,7 +56,9 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 IOLoger.LogWarningAsync(ex);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 fileExtention = null;
                 return false;
             }
@@ -73,7 +79,9 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 IOLoger.LogWarningAsync(ex);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 filename = null;
                 return false;
             }
@@ -176,7 +184,7 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
-                IOLoger.LogErrorAsnyc(ex);
+                IOLoger.LogErrorAsnyc(ex).GetAwaiter();
                 throw;
             }
         }
@@ -254,7 +262,7 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
-                IOLoger.LogErrorAsnyc(ex);
+                IOLoger.LogErrorAsnyc(ex).GetAwaiter();
                 throw;
             }
         }
@@ -271,7 +279,7 @@ namespace TastyIO
             }
             catch(Exception ex)
             {
-                IOLoger.LogErrorAsnyc(ex);
+                IOLoger.LogErrorAsnyc(ex).GetAwaiter();
                 throw;
             }
         }
@@ -288,7 +296,7 @@ namespace TastyIO
             }
             catch(Exception ex)
             {
-                IOLoger.LogErrorAsnyc(ex);
+                IOLoger.LogErrorAsnyc(ex).GetAwaiter();
                 throw;
             }
         }
@@ -318,7 +326,7 @@ namespace TastyIO
             }
             catch(Exception ex)
             {
-                IOLoger.LogErrorAsnyc(ex);
+                IOLoger.LogErrorAsnyc(ex).GetAwaiter();
                 throw;
             }
         }
@@ -340,7 +348,75 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
-                IOLoger.LogErrorAsnyc(ex);
+                IOLoger.LogErrorAsnyc(ex).GetAwaiter();
+                throw;
+            }
+        }
+        #endregion
+
+        #region Modification
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="name"></param>
+        /// <returns>new filepath</returns>
+        public static string Rename(string filePath, string name)
+        {
+            try
+            {
+                var info = new FileInfo(filePath);
+                var path = Path.Combine(info.DirectoryName, name);
+                File.Move(filePath, path);
+
+                return path;
+            }
+            catch (Exception ex)
+            {
+                IOLoger.LogErrorAsnyc(ex).GetAwaiter();
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceFilePath"></param>
+        /// <param name="destinationDir"></param>
+        /// <returns> new filepath </returns>
+        public static string Move(string sourceFilePath, string destinationDir)
+        {
+            try
+            {
+                var info = new FileInfo(sourceFilePath);
+                var path = Path.Combine(destinationDir, info.Name);
+                Directory.CreateDirectory(destinationDir);
+
+                File.Move(sourceFilePath, path);
+                return path;
+            }
+            catch (Exception ex)
+            {
+                IOLoger.LogErrorAsnyc(ex).GetAwaiter();
+                throw;
+            }
+        }
+
+        public static string Copy(string sourceFilePath, string destinationDir)
+        {
+            try
+            {
+                var info = new FileInfo(sourceFilePath);
+                var path = Path.Combine(destinationDir, info.Name);
+                Directory.CreateDirectory(destinationDir);
+
+                File.Copy(sourceFilePath, path);
+                return path;
+            }
+            catch (Exception ex)
+            {
+                IOLoger.LogErrorAsnyc(ex).GetAwaiter();
                 throw;
             }
         }
@@ -355,7 +431,7 @@ namespace TastyIO
             }
             catch (Exception ex)
             {
-                IOLoger.LogErrorAsnyc(ex);
+                IOLoger.LogErrorAsnyc(ex).GetAwaiter();
             }
         }
         #endregion

@@ -4,8 +4,6 @@ using System.Reflection;
 
 public static class Program
 {
-    public static readonly ConsoleColor FOREGROND_COLOR = ConsoleColor.Green;
-    public static readonly ConsoleColor BACKGROUND_COLOR = ConsoleColor.Black;
     static void Main()
     {
         IOLoger.CreateOutputFile();

@@ -30,7 +30,9 @@ namespace TastyIO
             bool result = TryGet(() => Directory.GetDirectories(dir), out dirs, out var ex);
             if(!result)
             {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 IOLoger.LogWarningAsync(ex);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
             }
 
             return result;
@@ -41,7 +43,9 @@ namespace TastyIO
             bool result = TryGet(() => Directory.GetFiles(dir), out dirs, out var ex);
             if (!result)
             {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 IOLoger.LogWarningAsync(ex);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
             }
 
             return result;
@@ -52,7 +56,9 @@ namespace TastyIO
             bool result = TryGet(() => new StreamReader(path), out reader, out var ex);
             if (!result)
             {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 IOLoger.LogWarningAsync(ex);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
             }
 
             return result;
@@ -63,7 +69,9 @@ namespace TastyIO
             bool result = TryGet(() => new StreamWriter(path), out writer, out var ex);
             if (!result)
             {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 IOLoger.LogWarningAsync(ex);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
             }
 
             return result;
