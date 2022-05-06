@@ -19,19 +19,19 @@ namespace IOBenchmarks
             //Ifchain
             if (num / thousen < 1)
             {
-                result = String.Format("{0}", num);
+                result = string.Format("{0}", num);
             }
             else if (num / thousen <= thousen * thousen)
             {
-                result = String.Format("{0}K", num / thousen);
+                result = string.Format("{0}K", num / thousen);
             }
             else if (num / million <= million * thousen)
             {
-                result = String.Format("{0}M", num / million);
+                result = string.Format("{0}M", num / million);
             }
             else
             {
-                result = String.Format("{0}G", num / billion);
+                result = string.Format("{0}G", num / billion);
             }
 
             return result;
@@ -41,14 +41,14 @@ namespace IOBenchmarks
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("[ERROR] {0} {1} {2}", localTime, message, ex.Message);
-            Console.ForegroundColor = Program.FOREGROND_COLOR;
+            Console.ResetColor();
         }
 
         public static void IOLoger_OnWarning(DateTime localTime, Exception ex, string message)
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("[WARN] {0} {1} {2}", localTime, message, ex.Message);
-            Console.ForegroundColor = Program.FOREGROND_COLOR;
+            Console.ResetColor();
         }
     }
 }

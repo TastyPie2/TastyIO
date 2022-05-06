@@ -25,7 +25,7 @@ namespace TastyIO
             IOUtility.TryOpenWrite(filePath, out var writer);
 
             if (writer == null)
-                LogErrorAsnyc(new Exception("Unable to create log file."));
+                LogErrorAsnyc(new Exception("Unable to create log file.")).GetAwaiter();
             else
                 OutputStream = writer.BaseStream;
         }
@@ -45,7 +45,9 @@ namespace TastyIO
             IOUtility.TryOpenWrite(path, out var writer);
 
             if (writer == null)
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 LogErrorAsnyc(new Exception("Unable to create log file."));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
             else
                 OutputStream = writer.BaseStream;
         }
@@ -106,7 +108,9 @@ namespace TastyIO
 
         #region PrivateLoging
 
+#pragma warning disable CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
         private static async Task LogExceptionAsync(Exception ex, LogType logType)
+#pragma warning restore CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
         {
             if (OutputStream != null)
             {
@@ -118,7 +122,9 @@ namespace TastyIO
             }
         }
 
+#pragma warning disable CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
         private static async Task LogMessage(string msg, LogType logType)
+#pragma warning restore CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
         {
             if (OutputStream != null)
             {
@@ -134,9 +140,13 @@ namespace TastyIO
 
         #region PublicLoging
 
+#pragma warning disable CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
         public static async Task<bool> LogWarningAsync(Exception ex)
+#pragma warning restore CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
         {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
             LogExceptionAsync(ex, LogType.Warning);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
 
             if (OnWarning == null)
                 return false;
@@ -146,9 +156,13 @@ namespace TastyIO
             return true;
         }
 
+#pragma warning disable CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
         public static async Task<bool> LogErrorAsnyc(Exception ex)
+#pragma warning restore CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
         {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
             LogExceptionAsync(ex, LogType.Error);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
 
             if (OnError == null)
                 return false;
