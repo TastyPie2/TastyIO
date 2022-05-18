@@ -40,6 +40,7 @@ namespace TastyIO
                 using (StreamReader reader = new StreamReader(Filepath))
                 {
                     json = reader.ReadToEnd();
+                    reader.Close();
                 }
 
                 return JsonConvert.DeserializeObject<T>(json);
@@ -62,6 +63,7 @@ namespace TastyIO
                 using (var fs = File.CreateText(Filepath))
                 {
                     fs.WriteLine(json);
+                    fs.Close();
                 }
             }, out var ex);
 
@@ -95,6 +97,6 @@ namespace TastyIO
             FileUtils.CreateFile(Filepath, JsonConvert.SerializeObject(default(T)));
         }
 
-
+        
     }
 }
